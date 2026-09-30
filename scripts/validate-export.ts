@@ -6,6 +6,7 @@
  */
 
 import { extname, basename } from "path";
+import { styleText } from "node:util";
 
 import { Command, InvalidArgumentError } from "@commander-js/extra-typings";
 import { subDays } from "date-fns";
@@ -57,6 +58,13 @@ const program = new Command()
     resolveOutputPathOpt,
   )
   .option("-r --raw", "output raw string to stdout", false)
+  .configureHelp({
+    styleTitle: (s) => styleText("bold", s),
+    styleCommandText: (s) => styleText("cyan", s),
+    styleOptionText: (s) => styleText("green", s),
+    styleArgumentText: (s) => styleText("yellow", s),
+    styleDescriptionText: (s) => styleText("dim", s),
+  })
   .showHelpAfterError()
   .parse();
 
