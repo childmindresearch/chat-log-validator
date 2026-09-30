@@ -1,1 +1,11 @@
-/node_modules
+node_modules
+.env*
+!.env.example
+dist
+*.log
+.DS_Store
+
+*.tfstate
+*.tfstate.backup
+.terraform
+.terraform.tfstate.lock.info
