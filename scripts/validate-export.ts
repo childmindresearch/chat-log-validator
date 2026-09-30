@@ -1,8 +1,18 @@
+#!/usr/bin/env bun
 /*
  * validate-export.ts
  *
  * Takes a chat log export as input, extracts the conversations, concatenates,
  * validates, and optionally truncates them.
+ *
+ * Usage: validate-export [options]
+ *
+ * Options:
+ *   -i --input <path>          chat log export file path (.zip or .json)
+ *   -t --truncate-days <days>  truncate messages older than: today - days
+ *   -o --output <path>         save validated/truncated data to output file path
+ *   -r --raw                   output raw string to stdout (default: false)
+ *   -h, --help                 display help for command
  */
 
 import { extname, basename } from "path";
