@@ -38,8 +38,9 @@ function isGeminiActivityPath(name: string) {
   return /(^|\/)gemini apps\/[^/]+\.json$/i.test(name);
 }
 
-function isNestedChatGPTArchivePath(name: string) {
-  return /(^|\/)user online activity\/conversations__[^/]*chatgpt-\d+\.zip$/i.test(name);
+function isNestedArchive(name: string) {
+  const file = new VFile({ path: name });
+  return file.extname === ".zip";
 }
 
 function isValidMultiFilePath(name: string) {
@@ -128,33 +129,6 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
 
   const files = Object.values(zip.files).filter((e) => !e.dir);
 
-  const nestedArchives = R.sortBy(
-    files.filter((e) => isNestedChatGPTArchivePath(e.name)),
-    (e) => e.name,
-  );
-
-  if (nestedArchives.length > 0) {
-    if (depth >= MAX_ARCHIVE_DEPTH) {
-      return empty("Archive is nested too deeply");
-    }
-
-    const results: Extract<ReadChatLogFileResult, { status: "extracted" }>[] = [];
-
-    for (const archive of nestedArchives) {
-      const result = await scanArchive(input, await archive.async("blob"), depth + 1);
-
-      if (result.status !== "extracted") {
-        return result.status === "error" ? result : empty(result.reason);
-      }
-
-      results.push(result);
-    }
-
-    const jsonFiles = results.map((r) => r.extracted);
-
-    return concatChatGPTFiles(jsonFiles, extracted, empty);
-  }
-
   const geminiEntries = files.filter((e) => isGeminiActivityPath(e.name));
 
   if (geminiEntries.length > 0) {
@@ -187,6 +161,33 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
 
   if (entry) {
     return extracted(await entry.async("string"), entry.name);
+  }
+
+  const nestedArchives = R.sortBy(
+    files.filter((e) => isNestedArchive(e.name)),
+    (e) => e.name,
+  );
+
+  if (nestedArchives.length > 0) {
+    if (depth >= MAX_ARCHIVE_DEPTH) {
+      return empty("Archive is nested too deeply");
+    }
+
+    const results: Extract<ReadChatLogFileResult, { status: "extracted" }>[] = [];
+
+    for (const archive of nestedArchives) {
+      const result = await scanArchive(input, await archive.async("blob"), depth + 1);
+
+      if (result.status !== "extracted") {
+        return result.status === "error" ? result : empty(result.reason);
+      }
+
+      results.push(result);
+    }
+
+    const jsonFiles = results.map((r) => r.extracted);
+
+    return concatChatGPTFiles(jsonFiles, extracted, empty);
   }
 
   return empty("Archive does not contain any known chat log files");

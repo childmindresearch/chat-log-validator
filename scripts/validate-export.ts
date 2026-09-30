@@ -27,6 +27,7 @@ import { formatSource } from "@/schema";
 import { readChatLogFile } from "@/readChatLogFile";
 import { validateChatLog } from "@/validateChatLog";
 import { truncateChatLog } from "@/truncateChatLog";
+import { formatBytes } from "@/utils/formatBytes";
 
 /* Parse Args ----------------------------------------------------------------*/
 
@@ -150,6 +151,10 @@ if (result.type !== "success") {
 
 log("> Validated chat log content from source:", formatSource(result.data.source));
 
+const fullSize = Buffer.byteLength(readResult.content, "utf8");
+
+log(`> Chat log size: ${formatBytes(fullSize)}`);
+
 /* Truncate Chat Log ---------------------------------------------------------*/
 
 const truncated = options.truncateDays
@@ -157,7 +162,12 @@ const truncated = options.truncateDays
   : result.data.content;
 
 if (options.truncateDays) {
-  log(`> Truncated chat log to ${options.truncateDays}`);
+  const truncatedSize = Buffer.byteLength(JSON.stringify(truncated), "utf8");
+  const sign = fullSize > truncatedSize ? "-" : "";
+
+  log(`> Truncated chat log to ${options.truncateDays} days`);
+  log(`> Truncated size: ${formatBytes(truncatedSize)}`);
+  log(`> Size diff: ${sign}${formatBytes(fullSize - truncatedSize)}`);
 } else {
   warn("> Skipped truncation");
 }
