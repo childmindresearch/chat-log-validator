@@ -8,10 +8,12 @@
     "fmt:check": "oxfmt --check"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
+    "@commander-js/extra-typings": "^15.0.0",
+    "commander": "^15.0.0",
     "date-fns": "^4.4.0",
     "jszip": "^3.10.2",
     "remeda": "^2.50.0",
+    "untildify": "^6.0.0",
     "vfile": "^6.0.3",
     "zod": "^4.6.5"
   },
