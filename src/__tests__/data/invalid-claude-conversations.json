@@ -1,0 +1,46 @@
+[
+  {
+    "uuid": "2b6dbc0d-7275-4686-9a33-4a6ad8b0f65f",
+    "name": "Greeting",
+    "summary": "",
+    "created_at": "2026-07-08T18:35:35.664070Z",
+    "updated_at": "2026-07-08T18:17:40.980934Z",
+    "chat_messages": [
+      {
+        "uuid": "d3273273-3a97-4d4c-ba29-ec2d2a678759",
+        "text": "Hello!",
+        "content": [
+          {
+            "start_timestamp": "2026-07-08T18:35:37.209577Z",
+            "stop_timestamp": "2026-07-08T18:35:37.209577Z",
+            "flags": null,
+            "citations": []
+          }
+        ],
+        "sender": "human",
+        "created_at": "2026-07-08T18:35:37.215446Z",
+        "updated_at": "2026-07-08T18:35:37.215446Z",
+        "attachments": [],
+        "files": [],
+        "parent_message_uuid": "00000000-0000-4000-8000-000000000000"
+      },
+      {
+        "uuid": "266c75d9-55f2-42e1-945a-14810c12ecc6",
+        "text": "Hi!",
+        "content": [
+          {
+            "start_timestamp": "2026-07-08T18:35:38.955129Z",
+            "stop_timestamp": "2026-07-08T18:35:50.497903Z",
+            "flags": null,
+            "type": "text",
+            "text": "Hi!",
+            "citations": []
+          }
+        ],
+        "attachments": [],
+        "files": [],
+        "parent_message_uuid": "d3273273-3a97-4d4c-ba29-ec2d2a678759"
+      }
+    ]
+  }
+]

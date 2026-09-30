@@ -1,0 +1,27 @@
+[
+  {
+    "header": "Gemini Apps",
+    "title": "Prompted How do I set up Docker for Node.js?",
+    "time": "2026-07-31T20:45:16.028Z",
+    "products": ["Gemini Apps"],
+    "activityControls": null,
+    "safeHtmlItem": [
+      {
+        "html": "<p>Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.</p>\n<p>Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.</p>\n<p>Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.</p>\n<h3>Details</h3>\n<ol>\n<li><strong>Step 1:</strong> Lorem ipsum dolor sit <code>amet</code>.</li>\n<li><strong>Step 2:</strong> Lorem ipsum dolor sit <code>amet</code>.</li>\n</ol>\n<hr>\n<blockquote>\n<p><strong>Note:</strong> See <a href=\"https://example.com/docs\">the docs</a> for more.</p>\n</blockquote>\n"
+      }
+    ]
+  },
+  {
+    "header": "Gemini Apps",
+    "title": "Prompted How do I set up Docker for Node.js?",
+    "time": "2026-07-31T18:38:34.015Z",
+    "products": ["Gemini Apps"],
+    "activityControls": ["Gemini Apps Activity"],
+    "safeHtmlItem": [
+      {
+        "html": "<p>Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.</p>\n<p>Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum.</p>\n<h3>Details</h3>\n<ol>\n<li><strong>Step 1:</strong> Lorem ipsum dolor sit <code>amet</code>.</li>\n<li><strong>Step 2:</strong> Lorem ipsum dolor sit <code>amet</code>.</li>\n<li><strong>Step 3:</strong> Lorem ipsum dolor sit <code>amet</code>.</li>\n<li><strong>Step 4:</strong> Lorem ipsum dolor sit <code>amet</code>.</li>\n</ol>\n<hr>\n<blockquote>\n<p><strong>Note:</strong> See <a href=\"https://example.com/docs\">the docs</a> for more.</p>\n</blockquote>\n"
+      }
+    ]
+  }
+]
+

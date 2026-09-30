@@ -1,0 +1,436 @@
+[
+  {
+    "id": "64cd4f3d-8fb7-4f6c-bafb-40deb54746ae",
+    "title": "Help me write unit tests",
+    "create_time": 0,
+    "update_time": 0,
+    "mapping": {
+      "12e42479-3ad8-4674-a300-9e376f27ade5": {
+        "id": "12e42479-3ad8-4674-a300-9e376f27ade5",
+        "parent": null,
+        "children": [
+          "33b8cb5c-c79d-430e-b484-43e067646f4a"
+        ],
+        "message": null
+      },
+      "33b8cb5c-c79d-430e-b484-43e067646f4a": {
+        "id": "33b8cb5c-c79d-430e-b484-43e067646f4a",
+        "parent": "12e42479-3ad8-4674-a300-9e376f27ade5",
+        "children": [
+          "91edf5a2-0501-4e46-b2c5-74e8e020efa4"
+        ],
+        "message": {
+          "id": "33b8cb5c-c79d-430e-b484-43e067646f4a",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Help me debug this TypeScript error"
+            ]
+          }
+        }
+      },
+      "91edf5a2-0501-4e46-b2c5-74e8e020efa4": {
+        "id": "91edf5a2-0501-4e46-b2c5-74e8e020efa4",
+        "parent": "33b8cb5c-c79d-430e-b484-43e067646f4a",
+        "children": [
+          "e0213064-e301-4976-adad-4f07b61c5f34"
+        ],
+        "message": {
+          "id": "91edf5a2-0501-4e46-b2c5-74e8e020efa4",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "e0213064-e301-4976-adad-4f07b61c5f34": {
+        "id": "e0213064-e301-4976-adad-4f07b61c5f34",
+        "parent": "91edf5a2-0501-4e46-b2c5-74e8e020efa4",
+        "children": [
+          "65fcfaaa-4ac9-46d7-b7b8-90d95bcba5e4"
+        ],
+        "message": {
+          "id": "e0213064-e301-4976-adad-4f07b61c5f34",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Review my React component"
+            ]
+          }
+        }
+      },
+      "65fcfaaa-4ac9-46d7-b7b8-90d95bcba5e4": {
+        "id": "65fcfaaa-4ac9-46d7-b7b8-90d95bcba5e4",
+        "parent": "e0213064-e301-4976-adad-4f07b61c5f34",
+        "children": [
+          "0b9fec23-55fa-4e1e-a7c8-af5f7b71261a"
+        ],
+        "message": {
+          "id": "65fcfaaa-4ac9-46d7-b7b8-90d95bcba5e4",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "0b9fec23-55fa-4e1e-a7c8-af5f7b71261a": {
+        "id": "0b9fec23-55fa-4e1e-a7c8-af5f7b71261a",
+        "parent": "65fcfaaa-4ac9-46d7-b7b8-90d95bcba5e4",
+        "children": [
+          "4d0bc74b-77a0-498c-a2cc-b3eaeb09748a"
+        ],
+        "message": {
+          "id": "0b9fec23-55fa-4e1e-a7c8-af5f7b71261a",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "How do I set up Docker for Node.js?"
+            ]
+          }
+        }
+      },
+      "4d0bc74b-77a0-498c-a2cc-b3eaeb09748a": {
+        "id": "4d0bc74b-77a0-498c-a2cc-b3eaeb09748a",
+        "parent": "0b9fec23-55fa-4e1e-a7c8-af5f7b71261a",
+        "children": [
+          "444417dd-e1b4-4f51-a695-244d907c5cdb"
+        ],
+        "message": {
+          "id": "4d0bc74b-77a0-498c-a2cc-b3eaeb09748a",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "444417dd-e1b4-4f51-a695-244d907c5cdb": {
+        "id": "444417dd-e1b4-4f51-a695-244d907c5cdb",
+        "parent": "4d0bc74b-77a0-498c-a2cc-b3eaeb09748a",
+        "children": [
+          "e80c1e39-8798-42ad-9686-57fc00e2eaf7"
+        ],
+        "message": {
+          "id": "444417dd-e1b4-4f51-a695-244d907c5cdb",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Explain how async/await works"
+            ]
+          }
+        }
+      },
+      "e80c1e39-8798-42ad-9686-57fc00e2eaf7": {
+        "id": "e80c1e39-8798-42ad-9686-57fc00e2eaf7",
+        "parent": "444417dd-e1b4-4f51-a695-244d907c5cdb",
+        "children": [
+          "47a33c02-9eca-4744-b708-313e006c0774"
+        ],
+        "message": {
+          "id": "e80c1e39-8798-42ad-9686-57fc00e2eaf7",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "47a33c02-9eca-4744-b708-313e006c0774": {
+        "id": "47a33c02-9eca-4744-b708-313e006c0774",
+        "parent": "e80c1e39-8798-42ad-9686-57fc00e2eaf7",
+        "children": [
+          "d78c0521-b3a8-4777-8d07-3bca06096e93"
+        ],
+        "message": {
+          "id": "47a33c02-9eca-4744-b708-313e006c0774",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "What's the difference between REST and GraphQL?"
+            ]
+          }
+        }
+      },
+      "d78c0521-b3a8-4777-8d07-3bca06096e93": {
+        "id": "d78c0521-b3a8-4777-8d07-3bca06096e93",
+        "parent": "47a33c02-9eca-4744-b708-313e006c0774",
+        "children": [
+          "7d72f869-8a42-4a6e-848d-79d0167cca52"
+        ],
+        "message": {
+          "id": "d78c0521-b3a8-4777-8d07-3bca06096e93",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "7d72f869-8a42-4a6e-848d-79d0167cca52": {
+        "id": "7d72f869-8a42-4a6e-848d-79d0167cca52",
+        "parent": "d78c0521-b3a8-4777-8d07-3bca06096e93",
+        "children": [
+          "c7342712-104c-4c1d-8bfe-974b63ac8676"
+        ],
+        "message": {
+          "id": "7d72f869-8a42-4a6e-848d-79d0167cca52",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Help me write unit tests"
+            ]
+          }
+        }
+      },
+      "c7342712-104c-4c1d-8bfe-974b63ac8676": {
+        "id": "c7342712-104c-4c1d-8bfe-974b63ac8676",
+        "parent": "7d72f869-8a42-4a6e-848d-79d0167cca52",
+        "children": [
+          "d024d8a0-4bf8-47a1-8240-9542b2fe20b1"
+        ],
+        "message": {
+          "id": "c7342712-104c-4c1d-8bfe-974b63ac8676",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "d024d8a0-4bf8-47a1-8240-9542b2fe20b1": {
+        "id": "d024d8a0-4bf8-47a1-8240-9542b2fe20b1",
+        "parent": "c7342712-104c-4c1d-8bfe-974b63ac8676",
+        "children": [
+          "638144ed-a074-449d-94ec-7dee892c35a4"
+        ],
+        "message": {
+          "id": "d024d8a0-4bf8-47a1-8240-9542b2fe20b1",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Help me debug this TypeScript error"
+            ]
+          }
+        }
+      },
+      "638144ed-a074-449d-94ec-7dee892c35a4": {
+        "id": "638144ed-a074-449d-94ec-7dee892c35a4",
+        "parent": "d024d8a0-4bf8-47a1-8240-9542b2fe20b1",
+        "children": [
+          "c31d66a3-c103-4349-86ac-3995a5349de3"
+        ],
+        "message": {
+          "id": "638144ed-a074-449d-94ec-7dee892c35a4",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "c31d66a3-c103-4349-86ac-3995a5349de3": {
+        "id": "c31d66a3-c103-4349-86ac-3995a5349de3",
+        "parent": "638144ed-a074-449d-94ec-7dee892c35a4",
+        "children": [
+          "96bf7265-0e3e-4596-97b1-b2664073de21"
+        ],
+        "message": {
+          "id": "c31d66a3-c103-4349-86ac-3995a5349de3",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Write a Python script to parse CSV files"
+            ]
+          }
+        }
+      },
+      "96bf7265-0e3e-4596-97b1-b2664073de21": {
+        "id": "96bf7265-0e3e-4596-97b1-b2664073de21",
+        "parent": "c31d66a3-c103-4349-86ac-3995a5349de3",
+        "children": [
+          "37e43d40-03d7-4262-bfb4-6b94e5103a4b"
+        ],
+        "message": {
+          "id": "96bf7265-0e3e-4596-97b1-b2664073de21",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "37e43d40-03d7-4262-bfb4-6b94e5103a4b": {
+        "id": "37e43d40-03d7-4262-bfb4-6b94e5103a4b",
+        "parent": "96bf7265-0e3e-4596-97b1-b2664073de21",
+        "children": [
+          "565f79c7-5917-4aab-ab88-2dcd31dd2de8"
+        ],
+        "message": {
+          "id": "37e43d40-03d7-4262-bfb4-6b94e5103a4b",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "What's the difference between REST and GraphQL?"
+            ]
+          }
+        }
+      },
+      "565f79c7-5917-4aab-ab88-2dcd31dd2de8": {
+        "id": "565f79c7-5917-4aab-ab88-2dcd31dd2de8",
+        "parent": "37e43d40-03d7-4262-bfb4-6b94e5103a4b",
+        "children": [
+          "84af5cf9-6c2e-42a0-a55f-8ea5235dd34b"
+        ],
+        "message": {
+          "id": "565f79c7-5917-4aab-ab88-2dcd31dd2de8",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "84af5cf9-6c2e-42a0-a55f-8ea5235dd34b": {
+        "id": "84af5cf9-6c2e-42a0-a55f-8ea5235dd34b",
+        "parent": "565f79c7-5917-4aab-ab88-2dcd31dd2de8",
+        "children": [
+          "d6cb71dc-240f-4622-98ab-f52098af9be9"
+        ],
+        "message": {
+          "id": "84af5cf9-6c2e-42a0-a55f-8ea5235dd34b",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "How do I set up Docker for Node.js?"
+            ]
+          }
+        }
+      },
+      "d6cb71dc-240f-4622-98ab-f52098af9be9": {
+        "id": "d6cb71dc-240f-4622-98ab-f52098af9be9",
+        "parent": "84af5cf9-6c2e-42a0-a55f-8ea5235dd34b",
+        "children": [
+          "7ae6e514-aa94-4bff-aef6-8814175d02eb"
+        ],
+        "message": {
+          "id": "d6cb71dc-240f-4622-98ab-f52098af9be9",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "Here's how I'd approach that. Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum."
+            ]
+          }
+        }
+      },
+      "7ae6e514-aa94-4bff-aef6-8814175d02eb": {
+        "id": "7ae6e514-aa94-4bff-aef6-8814175d02eb",
+        "parent": "d6cb71dc-240f-4622-98ab-f52098af9be9",
+        "children": [],
+        "message": {
+          "id": "7ae6e514-aa94-4bff-aef6-8814175d02eb",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 0,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "What's the difference between REST and GraphQL?"
+            ]
+          }
+        }
+      }
+    }
+  }
+]

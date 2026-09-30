@@ -1,0 +1,132 @@
+[
+  {
+    "id": "2d19e20b-c8ea-4600-a518-40eb03eb983d",
+    "title": "Learning Python",
+    "create_time": 1720100000.123,
+    "update_time": 1720100082.731,
+    "mapping": {
+      "4d5d65cf-f40c-4af3-bca6-55f2d2b0d41d": {
+        "id": "4d5d65cf-f40c-4af3-bca6-55f2d2b0d41d",
+        "parent": null,
+        "children": ["1b5080e5-1d55-4b82-8d71-d2f8c6cba33e"],
+        "message": null
+      },
+      "1b5080e5-1d55-4b82-8d71-d2f8c6cba33e": {
+        "id": "1b5080e5-1d55-4b82-8d71-d2f8c6cba33e",
+        "parent": "4d5d65cf-f40c-4af3-bca6-55f2d2b0d41d",
+        "children": ["e470f8dd-d3fa-48b5-8564-88d3a991b4d2"],
+        "message": {
+          "id": "d58c6b6d-0b68-45ff-98b5-d50d4a4fc5a2",
+          "author": {
+            "role": "unknown"
+          },
+          "create_time": 1720100001.145,
+          "content": {
+            "content_type": "text",
+            "parts": ["What is a Python list comprehension?"]
+          }
+        }
+      },
+      "e470f8dd-d3fa-48b5-8564-88d3a991b4d2": {
+        "id": "e470f8dd-d3fa-48b5-8564-88d3a991b4d2",
+        "parent": "1b5080e5-1d55-4b82-8d71-d2f8c6cba33e",
+        "children": ["bb1ef856-130c-4d86-b53c-7a09d77d3f9f"],
+        "message": {
+          "id": "a85e6f4e-c6b2-49f6-b7db-ccfae36c1235",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 1720100005.987,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "A list comprehension is a concise way to construct a list by combining a loop and an expression into a single syntax."
+            ]
+          }
+        }
+      },
+      "bb1ef856-130c-4d86-b53c-7a09d77d3f9f": {
+        "id": "bb1ef856-130c-4d86-b53c-7a09d77d3f9f",
+        "parent": "e470f8dd-d3fa-48b5-8564-88d3a991b4d2",
+        "children": ["90f7606b-2338-4e69-b14a-dc2ef0a67693"],
+        "message": {
+          "id": "cd7e692d-9975-4547-9c73-26d8f4703b8b",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 1720100023.412,
+          "content": {
+            "content_type": "text",
+            "parts": ["Can you show me an example?"]
+          }
+        }
+      },
+      "90f7606b-2338-4e69-b14a-dc2ef0a67693": {
+        "id": "90f7606b-2338-4e69-b14a-dc2ef0a67693",
+        "parent": "bb1ef856-130c-4d86-b53c-7a09d77d3f9f",
+        "children": [],
+        "message": {
+          "id": "c45ff49f-02d6-4a0b-9e1b-c19d1c2781c2",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 1720100029.103,
+          "content": {
+            "content_type": "text",
+            "parts": [
+              "For example:\n\n```python\nsquares = [x * x for x in range(5)]\nprint(squares)\n```\n\nThis produces `[0, 1, 4, 9, 16]`."
+            ]
+          }
+        }
+      }
+    },
+    "current_node": "90f7606b-2338-4e69-b14a-dc2ef0a67693"
+  },
+  {
+    "id": "6d615f84-2b4c-45af-aaf9-17dfafdd8f0b",
+    "title": "Recipe Ideas",
+    "create_time": 1720200000.042,
+    "update_time": 1720200048.881,
+    "mapping": {
+      "58f5dfd2-8dca-4903-a3b6-55d68d7c40df": {
+        "id": "58f5dfd2-8dca-4903-a3b6-55d68d7c40df",
+        "parent": null,
+        "children": ["6f8fbd46-2fe0-4d80-bf84-498f05d1dd0e"],
+        "message": null
+      },
+      "6f8fbd46-2fe0-4d80-bf84-498f05d1dd0e": {
+        "id": "6f8fbd46-2fe0-4d80-bf84-498f05d1dd0e",
+        "parent": "58f5dfd2-8dca-4903-a3b6-55d68d7c40df",
+        "children": ["5d3e32d2-7142-4828-9b8e-8e560b5ec798"],
+        "message": {
+          "id": "0ea47d3b-4462-44af-84cf-70e7705efcd4",
+          "author": {
+            "role": "user"
+          },
+          "create_time": 1720200001.125,
+          "content": {
+            "content_type": "text",
+            "parts": ["Give me a vegetarian dinner idea."]
+          }
+        }
+      },
+      "5d3e32d2-7142-4828-9b8e-8e560b5ec798": {
+        "id": "5d3e32d2-7142-4828-9b8e-8e560b5ec798",
+        "parent": "6f8fbd46-2fe0-4d80-bf84-498f05d1dd0e",
+        "children": [],
+        "message": {
+          "id": "31d88488-f2c8-47dd-890f-582f957e970f",
+          "author": {
+            "role": "assistant"
+          },
+          "create_time": 1720200006.817,
+          "content": {
+            "content_type": "text",
+            "parts": ["Try a chickpea and spinach curry served over basmati rice with warm naan."]
+          }
+        }
+      }
+    },
+    "current_node": "5d3e32d2-7142-4828-9b8e-8e560b5ec798"
+  }
+]
