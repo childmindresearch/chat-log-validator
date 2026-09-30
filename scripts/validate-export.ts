@@ -11,6 +11,7 @@ import { styleText } from "node:util";
 import { Command, InvalidArgumentError } from "@commander-js/extra-typings";
 import { subDays } from "date-fns";
 import { z } from "zod";
+import "zod/compile";
 
 import { formatSource } from "@/schema";
 import { readChatLogFile } from "@/readChatLogFile";
@@ -73,9 +74,15 @@ const options = program.opts();
 
 /* Helpers -------------------------------------------------------------------*/
 
-function log(...s: string[]) {
+function log(...args: string[]) {
   if (!options.raw) {
-    console.log(...s);
+    console.log(...args.map((s) => styleText("blue", s)));
+  }
+}
+
+function warn(...args: string[]) {
+  if (!options.raw) {
+    console.log(...args.map((s) => styleText("yellow", s)));
   }
 }
 
@@ -89,7 +96,7 @@ try {
     type: extname(options.input.ext) === ".zip" ? "application/zip" : "application/json",
   });
 } catch (e) {
-  console.error(`[!] Could not read file: ${options.input.path}`);
+  console.error(`(!) Could not read file: ${options.input.path}`);
   process.exit(1);
 }
 
@@ -101,7 +108,7 @@ const readResult = await readChatLogFile(file);
 
 if (readResult.status !== "extracted") {
   console.error(
-    "[!] Failed to extract chat logs:",
+    "(!) Failed to extract chat logs:",
     readResult.status === "empty" ? "No valid files found" : readResult.error.message,
   );
   process.exit(1);
@@ -116,17 +123,19 @@ let data: unknown;
 try {
   data = JSON.parse(readResult.content);
 } catch (e) {
-  console.error("[!] Failed to parse JSON:", e instanceof Error ? e.message : "Uknown error");
+  console.error("(!) Failed to parse JSON:", e instanceof Error ? e.message : "Uknown error");
 }
 
 log("> Parsed JSON");
 
 /* Validate Chat Log ---------------------------------------------------------*/
 
+const then = performance.now();
 const result = validateChatLog(data);
+log(`validated in: ${performance.now() - then}`);
 
 if (result.type !== "success") {
-  console.error("[!] Could not validate chat log");
+  console.error("(!) Could not validate chat log");
   result.errors.forEach((s) => console.error("    |", s));
   process.exit(1);
 }
@@ -141,6 +150,8 @@ const truncated = options.truncateDays
 
 if (options.truncateDays) {
   log(`> Truncated chat log to ${options.truncateDays}`);
+} else {
+  warn("> Skipped truncation");
 }
 
 /* Output Data ---------------------------------------------------------------*/
@@ -150,7 +161,7 @@ if (options.output) {
     options.output.file.write(JSON.stringify(truncated));
     log(`Wrote output logs to: ${options.output.path}`);
   } catch (e) {
-    console.error(`[!] Could not write output to: ${options.output.path}`);
+    console.error(`(!) Could not write output to: ${options.output.path}`);
     process.exit(1);
   }
 }
