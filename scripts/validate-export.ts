@@ -12,6 +12,7 @@ import { Command, InvalidArgumentError } from "@commander-js/extra-typings";
 import { subDays } from "date-fns";
 import { z } from "zod";
 
+import { formatSource } from "@/schema";
 import { readChatLogFile } from "@/readChatLogFile";
 import { validateChatLog } from "@/validateChatLog";
 import { truncateChatLog } from "@/truncateChatLog";
@@ -130,7 +131,7 @@ if (result.type !== "success") {
   process.exit(1);
 }
 
-log("> Validated chat log content from source:", result.data.source);
+log("> Validated chat log content from source:", formatSource(result.data.source));
 
 /* Truncate Chat Log ---------------------------------------------------------*/
 
