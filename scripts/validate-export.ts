@@ -94,9 +94,9 @@ try {
 
 log("> Read file:", options.input.path);
 
-const readResult = await readChatLogFile(file);
-
 /* Extract Logs --------------------------------------------------------------*/
+
+const readResult = await readChatLogFile(file);
 
 if (readResult.status !== "extracted") {
   console.error(
@@ -115,7 +115,7 @@ let data: unknown;
 try {
   data = JSON.parse(readResult.content);
 } catch (e) {
-  console.log("> Failed to parse JSON:", e instanceof Error ? e.message : "Uknown error");
+  console.error("[!] Failed to parse JSON:", e instanceof Error ? e.message : "Uknown error");
 }
 
 log("> Parsed JSON");
@@ -147,9 +147,9 @@ if (options.truncateDays) {
 if (options.output) {
   try {
     options.output.file.write(JSON.stringify(truncated));
-    console.log(`Wrote truncated logs to: ${options.output.path}`);
+    log(`Wrote output logs to: ${options.output.path}`);
   } catch (e) {
-    console.error(`[!] Could not write truncated logs to: ${options.output.path}`);
+    console.error(`[!] Could not write output to: ${options.output.path}`);
     process.exit(1);
   }
 }
