@@ -140,9 +140,7 @@ log("> Parsed JSON");
 
 /* Validate Chat Log ---------------------------------------------------------*/
 
-const then = performance.now();
 const result = validateChatLog(data);
-log(`validated in: ${performance.now() - then}`);
 
 if (result.type !== "success") {
   console.error("(!) Could not validate chat log");
