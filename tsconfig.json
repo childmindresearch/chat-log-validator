@@ -20,7 +20,7 @@
     "noUncheckedIndexedAccess": true,
 
     "paths": {
-      "@shared/*": ["../shared/src/*"]
+      "@/*": ["./src/*"]
     },
 
     "types": ["bun"]

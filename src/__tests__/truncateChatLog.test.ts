@@ -3,12 +3,12 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import assert from "node:assert";
 
-import { validateChatLog } from "@shared/validateChatLog";
+import { validateChatLog } from "@/validateChatLog";
 import {
   truncateChatGPTChatLog,
   truncateClaudeChatLog,
   truncateGeminiChatLog,
-} from "@shared/truncateChatLog";
+} from "@/truncateChatLog";
 
 describe("truncateClaudeChatLog", () => {
   const filePath = path.join(import.meta.dir, "data", "valid-claude-conversations.json");

@@ -7,7 +7,7 @@ import {
   ValidSourceDataMap,
   ValidSource,
   ValidDataT,
-} from "@shared/schema";
+} from "@/schema";
 
 function formatIssues(issues: $ZodIssueBase[]) {
   return issues.map((issue) => {

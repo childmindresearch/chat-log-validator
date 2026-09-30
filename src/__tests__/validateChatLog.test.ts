@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import assert from "node:assert";
 
-import { validateChatLog } from "@shared/validateChatLog";
+import { validateChatLog } from "@/validateChatLog";
 
 describe("validateChatLog", () => {
   describe("invalid chat logs", () => {
