@@ -60,10 +60,14 @@ export type ClaudeConversationArray = z.infer<typeof ClaudeConversationArraySche
 
 // See: https://github.com/xuy/docs-for-agents/blob/main/ChatGPT_export_schema.md
 
+export const ChatGPTRoleSchema = z.enum(["user", "assistant", "system", "tool"]);
+
+export type ChatGPTRole = z.infer<typeof ChatGPTRoleSchema>;
+
 export const ChatGPTMessageSchema = z.looseObject({
   id: z.uuid(),
   author: z.looseObject({
-    role: z.enum(["user", "assistant", "system", "tool"]),
+    role: ChatGPTRoleSchema,
   }),
   create_time: z.number().nullable(),
   content: z.looseObject({
