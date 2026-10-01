@@ -38,9 +38,9 @@ function isGeminiActivityPath(name: string) {
   return /(^|\/)gemini apps\/[^/]+\.json$/i.test(name);
 }
 
-function isNestedArchive(name: string) {
+function isArchive(name: string) {
   const file = new VFile({ path: name });
-  return file.extname === ".zip";
+  return file.extname?.toLowerCase() === ".zip";
 }
 
 function isValidMultiFilePath(name: string) {
@@ -100,7 +100,11 @@ async function concatChatGPTFiles(
 
 // Readers ---------------------------------------------------------------------
 
-const MAX_ARCHIVE_DEPTH = 2;
+let MAX_ARCHIVE_DEPTH: number | null = null;
+
+export function setMaxArchiveDepth(depth: number | null) {
+  MAX_ARCHIVE_DEPTH = depth;
+}
 
 async function scanArchive(input: File, blob: Blob, depth: number): Promise<ReadChatLogFileResult> {
   const extracted = (content: string, name: string): ReadChatLogFileResult => ({
@@ -164,12 +168,12 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
   }
 
   const nestedArchives = R.sortBy(
-    files.filter((e) => isNestedArchive(e.name)),
+    files.filter((e) => isArchive(e.name)),
     (e) => e.name,
   );
 
   if (nestedArchives.length > 0) {
-    if (depth >= MAX_ARCHIVE_DEPTH) {
+    if (MAX_ARCHIVE_DEPTH !== null && depth >= MAX_ARCHIVE_DEPTH) {
       return empty("Archive is nested too deeply");
     }
 
