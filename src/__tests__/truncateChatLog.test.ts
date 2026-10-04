@@ -25,7 +25,7 @@ import {
  * Helpers
  * -------------------------------------------------------------------------- */
 
-const CUTOFF = new Date("2026-07-27T00:00:00.000Z");
+const CUTOFF = new Date("2026-01-01T00:00:00.000Z");
 const HOUR = 60 * 60 * 1000;
 
 const offset = (ms: number) => new Date(CUTOFF.getTime() + ms);
@@ -126,7 +126,7 @@ describe("truncateClaudeChatLog", () => {
   assert(data.source === "claude");
 
   it("truncates logs to last 5 days of history", () => {
-    const truncated = truncateClaudeChatLog(data, new Date("2026-07-27"));
+    const truncated = truncateClaudeChatLog(data, new Date("2025-12-26"));
     expect(truncated.content).toMatchSnapshot();
   });
 
@@ -222,7 +222,7 @@ describe("truncateChatGPTChatLog", () => {
   assert(data.source === "chatgpt");
 
   it("truncates logs to last 5 days of history", () => {
-    const truncated = truncateChatGPTChatLog(data, new Date("2026-07-27"));
+    const truncated = truncateChatGPTChatLog(data, new Date("2025-12-26"));
     expect(truncated.content).toMatchSnapshot();
   });
 
@@ -309,7 +309,7 @@ describe("truncateGeminiChatLog", () => {
   assert(data.source === "gemini");
 
   it("truncates logs to last 5 days of history", () => {
-    const truncated = truncateGeminiChatLog(data, new Date("2026-07-27"));
+    const truncated = truncateGeminiChatLog(data, new Date("2025-12-26"));
     expect(truncated.content).toMatchSnapshot();
   });
 
