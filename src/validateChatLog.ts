@@ -7,7 +7,7 @@ import {
   ValidSourceDataMap,
   ValidSource,
   ValidDataT,
-} from "@/schema";
+} from "@validator/schema";
 
 function formatIssues(issues: $ZodIssueBase[]) {
   return issues.map((issue) => {
@@ -51,25 +51,24 @@ type ValidationSuccessT<S extends ValidSource> = {
 
 export type ValidationSuccess = { [S in ValidSource]: ValidationSuccessT<S> }[ValidSource];
 
-export type SafeValidationFailureReason = "empty_after_truncation" | null;
+export type SafeValidationFailureReason = "validation_failed" | null;
+
+export type ValidationFailureData = {
+  source: ValidSource | "unknown";
+  content: any;
+};
 
 export type SafeValidationFailure = {
   type: "safe_failure";
   errors: string[];
   reason?: SafeValidationFailureReason;
-  data: {
-    source: ValidSource | "unknown";
-    content: any;
-  };
+  data: ValidationFailureData;
 };
 
 export type UnknownValidationFailure = {
   type: "unknown_failure";
   errors: string[];
-  data: {
-    source: ValidSource | "unknown";
-    content: any;
-  };
+  data: ValidationFailureData;
 };
 
 export type ValidationFailure = SafeValidationFailure | UnknownValidationFailure;
@@ -101,6 +100,7 @@ function validateWith<S extends ValidSource>(
   return {
     type: "safe_failure",
     errors: formatIssues(result.error.issues),
+    reason: "validation_failed",
     data: {
       source,
       content: data,

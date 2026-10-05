@@ -4,13 +4,13 @@ import path from "node:path";
 import assert from "node:assert";
 import * as R from "remeda";
 
-import { validateChatLog, ValidationSuccess } from "@/validateChatLog";
+import { validateChatLog, ValidationSuccess } from "@validator/validateChatLog";
 import {
   truncateChatLog,
   truncateChatGPTChatLog,
   truncateClaudeChatLog,
   truncateGeminiChatLog,
-} from "@/truncateChatLog";
+} from "@validator/truncateChatLog";
 import {
   ChatGPTConversation,
   ChatGPTMapping,
@@ -19,7 +19,7 @@ import {
   ClaudeConversation,
   GeminiPrompt,
   ValidDataT,
-} from "@/schema";
+} from "@validator/schema";
 
 /* -----------------------------------------------------------------------------
  * Helpers

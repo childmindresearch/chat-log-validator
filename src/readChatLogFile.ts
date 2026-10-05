@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import { VFile } from "vfile";
 import * as R from "remeda";
-import { BaseGeminiPromptSchema, BaseGeminiPrompt } from "@/schema";
+import { BaseGeminiPromptSchema, BaseGeminiPrompt } from "@validator/schema";
 
 // Types -----------------------------------------------------------------------
 

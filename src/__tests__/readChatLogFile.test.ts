@@ -1,6 +1,6 @@
 import { describe, it, expect } from "bun:test";
 import JSZip from "jszip";
-import { readChatLogFile } from "../readChatLogFile";
+import { readChatLogFile } from "@validator/readChatLogFile";
 import * as R from "remeda";
 
 async function makeZip(entries: Record<string, string>, name = "export.zip"): Promise<File> {

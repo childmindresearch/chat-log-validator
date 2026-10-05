@@ -19,7 +19,7 @@
     "noUncheckedIndexedAccess": true,
 
     "paths": {
-      "@/*": ["./src/*"]
+      "@validator/*": ["./src/*"]
     },
 
     "types": ["bun"]

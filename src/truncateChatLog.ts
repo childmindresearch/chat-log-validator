@@ -1,8 +1,8 @@
 import * as R from "remeda";
 import { isAfter, startOfDay } from "date-fns";
 
-import { ValidDataT } from "@/schema";
-import { ValidationSuccess } from "@/validateChatLog";
+import { ValidDataT } from "@validator/schema";
+import { ValidationSuccess } from "@validator/validateChatLog";
 
 export function truncateClaudeChatLog(
   data: ValidDataT<"claude">,
