@@ -47,6 +47,7 @@ describe("validateClaudeChatLog", () => {
           "Index 0 (chat_messages.1.sender): Invalid input",
           "Index 0 (chat_messages.1.updated_at): Invalid input: expected string, received undefined",
         ],
+        reason: "validation_failed",
         data: {
           source: "claude",
           content: fileContent,
@@ -82,6 +83,7 @@ describe("validateChatGPTChatLog", () => {
         errors: [
           'Index 0 (mapping.1b5080e5-1d55-4b82-8d71-d2f8c6cba33e.message.author.role): Invalid option: expected one of "user"|"assistant"|"system"|"tool"',
         ],
+        reason: "validation_failed",
         data: {
           source: "chatgpt",
           content: fileContent,
@@ -115,6 +117,7 @@ describe("validateGeminiChatLog", () => {
       expect(result).toStrictEqual({
         type: "safe_failure",
         errors: ["Index 0 (activityControls): Invalid input: expected array, received null"],
+        reason: "validation_failed",
         data: {
           source: "gemini",
           content: fileContent,
