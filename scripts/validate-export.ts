@@ -23,11 +23,11 @@ import { subDays } from "date-fns";
 import { z } from "zod";
 import "zod/compile";
 
-import { formatSource } from "@/schema";
-import { readChatLogFile } from "@/readChatLogFile";
-import { validateChatLog } from "@/validateChatLog";
-import { truncateChatLog } from "@/truncateChatLog";
-import { formatBytes } from "@/utils/formatBytes";
+import { formatSource } from "@validator/schema";
+import { readChatLogFile } from "@validator/readChatLogFile";
+import { validateChatLog } from "@validator/validateChatLog";
+import { truncateChatLog } from "@validator/truncateChatLog";
+import { formatBytes } from "@validator/utils/formatBytes";
 
 /* Parse Args ----------------------------------------------------------------*/
 
