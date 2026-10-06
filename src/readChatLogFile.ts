@@ -179,14 +179,25 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
 
     const results: Extract<ReadChatLogFileResult, { status: "extracted" }>[] = [];
 
+    let firstEmptyReason: string | null = null;
+
     for (const archive of nestedArchives) {
       const result = await scanArchive(input, await archive.async("blob"), depth + 1);
 
-      if (result.status !== "extracted") {
-        return result.status === "error" ? result : empty(result.reason);
+      if (result.status === "error") {
+        return result;
+      }
+
+      if (result.status === "empty") {
+        firstEmptyReason ??= result.reason;
+        continue;
       }
 
       results.push(result);
+    }
+
+    if (results.length === 0) {
+      return empty(firstEmptyReason ?? "Archive does not contain any known chat log files");
     }
 
     const jsonFiles = results.map((r) => r.extracted);

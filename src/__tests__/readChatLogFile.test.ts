@@ -139,6 +139,36 @@ describe("zip: multi-file path", () => {
     });
   });
 
+  it("skips nested zips without chat logs", async () => {
+    const nestedChatGPTZip = await makeNestedZip({
+      "/User Online Activity/Conversations__abcdef-chatgpt-0001.zip": [
+        "readme.txt",
+        "nothing here",
+      ],
+      "/User Online Activity/Conversations__abcdef-chatgpt-0002.zip": [
+        "conversations.json",
+        '[{"message": "hello2"}]',
+      ],
+    });
+    const r = await readChatLogFile(nestedChatGPTZip);
+    expect(r).toMatchObject({
+      status: "extracted",
+      content: '[{"message":"hello2"}]',
+    });
+  });
+
+  it("rejects nested zips when none contain chat logs", async () => {
+    const nestedChatGPTZip = await makeNestedZip({
+      "/User Online Activity/a.zip": ["readme.txt", "nothing here"],
+      "/User Online Activity/b.zip": ["other.txt", "nothing here either"],
+    });
+    const r = await readChatLogFile(nestedChatGPTZip);
+    expect(r).toMatchObject({
+      status: "empty",
+      reason: expect.stringContaining("known chat log files"),
+    });
+  });
+
   it("rejects nested ChatGPT zips with invalid data", async () => {
     const nestedChatGPTZip = await makeNestedZip({
       "/User Online Activity/Conversations__abcdef-chatgpt-0001.zip": [
