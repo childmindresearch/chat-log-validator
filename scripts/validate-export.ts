@@ -24,10 +24,8 @@ import { z } from "zod";
 import "zod/compile";
 
 import { formatSource } from "@validator/schema";
-import { readChatLogFile } from "@validator/readChatLogFile";
-import { validateChatLog } from "@validator/validateChatLog";
-import { truncateChatLog } from "@validator/truncateChatLog";
 import { formatBytes } from "@validator/utils/formatBytes";
+import { processExport, PipelineError } from "@validator/index";
 
 /* Parse Args ----------------------------------------------------------------*/
 
@@ -113,78 +111,65 @@ try {
 
 log("> Read file:", options.input.path);
 
-/* Extract Logs --------------------------------------------------------------*/
+const bytes = (s: string) => Buffer.byteLength(s, "utf8");
 
-const readResult = await readChatLogFile(file);
-
-if (readResult.status !== "extracted") {
-  console.error(
-    "(!) Failed to extract chat logs:",
-    readResult.status === "empty" ? "No valid files found" : readResult.error.message,
-  );
-  process.exit(1);
-}
-
-log("> Extracted chat logs");
-
-/* Parse Extracted JSON ------------------------------------------------------*/
-
-let data: unknown;
+const truncateBefore = options.truncateDays ? subDays(new Date(), options.truncateDays) : undefined;
 
 try {
-  data = JSON.parse(readResult.content);
-} catch (e) {
-  console.error("(!) Failed to parse JSON:", e instanceof Error ? e.message : "Uknown error");
-}
+  const { encode } = await processExport(file, {
+    truncateBefore,
+    debug: ({ stage, artifacts }) => {
+      switch (stage) {
+        case "extract":
+          log("> Extracted chat logs");
+          log(`> File size: ${formatBytes(artifacts.extract.extracted.size)}`);
+          return;
+        case "parse":
+          log("> Parsed JSON");
+          return;
+        case "validate":
+          log("> Validated chat log from source:", formatSource(artifacts.validate.data.source));
+          return;
+        case "truncate":
+          if (truncateBefore) log(`> Truncated chat log to ${options.truncateDays} days`);
+          else warn("> Skipped truncation");
+          return;
+        case "encode":
+          if (truncateBefore) {
+            const fullSize = artifacts.extract.extracted.size;
+            const truncatedSize = bytes(artifacts.encode);
+            const sign = fullSize > truncatedSize ? "-" : "";
+            log(`> Truncated size: ${formatBytes(truncatedSize)}`);
+            log(`> Size diff: ${sign}${formatBytes(fullSize - truncatedSize)}`);
+          }
+          return;
+      }
+    },
+  });
 
-log("> Parsed JSON");
-
-/* Validate Chat Log ---------------------------------------------------------*/
-
-const result = validateChatLog(data);
-
-if (result.type !== "success") {
-  console.error("(!) Could not validate chat log");
-  result.errors.forEach((s) => console.error("    |", s));
-  process.exit(1);
-}
-
-log("> Validated chat log content from source:", formatSource(result.data.source));
-
-const fullSize = Buffer.byteLength(readResult.content, "utf8");
-
-log(`> Chat log size: ${formatBytes(fullSize)}`);
-
-/* Truncate Chat Log ---------------------------------------------------------*/
-
-const truncated = options.truncateDays
-  ? truncateChatLog(result, subDays(new Date(), options.truncateDays)).data.content
-  : result.data.content;
-
-if (options.truncateDays) {
-  const truncatedSize = Buffer.byteLength(JSON.stringify(truncated), "utf8");
-  const sign = fullSize > truncatedSize ? "-" : "";
-
-  log(`> Truncated chat log to ${options.truncateDays} days`);
-  log(`> Truncated size: ${formatBytes(truncatedSize)}`);
-  log(`> Size diff: ${sign}${formatBytes(fullSize - truncatedSize)}`);
-} else {
-  warn("> Skipped truncation");
-}
-
-/* Output Data ---------------------------------------------------------------*/
-
-if (options.output) {
-  try {
-    options.output.file.write(JSON.stringify(truncated));
-    log(`Wrote output logs to: ${options.output.path}`);
-  } catch (e) {
-    console.error(`(!) Could not write output to: ${options.output.path}`);
-    process.exit(1);
+  if (options.raw) {
+    console.log(encode);
   }
-}
 
-if (options.raw) {
-  console.log(JSON.stringify(truncated));
-  process.exit(0);
+  if (options.output) {
+    try {
+      options.output.file.write(encode);
+      log(`> Wrote output logs to: ${options.output.path}`);
+    } catch (e) {
+      console.error(`(!) Could not write output to: ${options.output.path}`);
+      process.exit(1);
+    }
+  }
+} catch (e) {
+  if (!(e instanceof PipelineError)) throw e;
+
+  console.error(`(!) Failed at '${e.failure.stage}': ${e.failure.message}`);
+
+  if (e.failure.stage === "validate") {
+    e.failure.detail.errors.forEach((s) => console.error("    |", s));
+    const contentBytes = bytes(e.failure.prior.extract.content);
+    console.error(`    input was ${formatBytes(contentBytes)} of valid JSON`);
+  }
+
+  process.exit(1);
 }

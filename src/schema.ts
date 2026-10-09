@@ -1,6 +1,27 @@
 import { z } from "zod";
 
 /* -----------------------------------------------------------------------------
+ * Claude Manifest Exports
+ * -------------------------------------------------------------------------- */
+
+const ClaudeManifestDataFileSchema = z.object({
+  batch_index: z.number(),
+  export_url: z.url(),
+  category: z.string(),
+  part: z.number(),
+  filename: z.string(),
+});
+
+export const ClaudeManifestSchema = z.object({
+  instructions: z.string(),
+  created_at: z.string(),
+  total_files: z.number(),
+  data_files: z.array(ClaudeManifestDataFileSchema),
+});
+
+export type ClaudeManifest = z.infer<typeof ClaudeManifestSchema>;
+
+/* -----------------------------------------------------------------------------
  * Claude Conversation Parsing
  * -------------------------------------------------------------------------- */
 
