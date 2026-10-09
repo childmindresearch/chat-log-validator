@@ -197,13 +197,13 @@ describe("processChatLog", () => {
         "parse",
         "validate",
         "truncate",
-        "final",
+        "encode",
       ]);
       expect(artifacts.extract.status).toBe("extracted");
       expect(artifacts.parse).toStrictEqual(fixtureJson(name));
       expect(artifacts.validate.data.source).toBe(source);
       expect(artifacts.truncate).toBe(artifacts.validate);
-      expect(artifacts.final).toBe(artifacts.truncate);
+      expect(artifacts.encode).toBe(JSON.stringify(artifacts.truncate.data.content));
     });
 
     it("reads chat logs out of a zip archive", async () => {
@@ -213,10 +213,10 @@ describe("processChatLog", () => {
       );
 
       expect(artifacts.extract.inputFileType).toBe("zip");
-      expect(artifacts.final.data.source).toBe("chatgpt");
+      expect(artifacts.validate.data.source).toBe("chatgpt");
     });
 
-    it("applies the configured truncation to the final result", async () => {
+    it("applies the configured truncation", async () => {
       const truncateBefore = new Date("2025-12-26");
       const artifacts = await succeed(
         processChatLog(fixtureFile("valid-claude-conversations.json")).pipe(
@@ -225,7 +225,7 @@ describe("processChatLog", () => {
       );
 
       expect(artifacts.truncate).not.toBe(artifacts.validate);
-      expect(artifacts.final).toStrictEqual(
+      expect(artifacts.truncate).toStrictEqual(
         truncateModule.truncateChatLog(artifacts.validate, truncateBefore),
       );
     });

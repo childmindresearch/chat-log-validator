@@ -48,6 +48,20 @@ type ValidateResult = ReturnType<typeof validateChatLog>;
 type Validated = Extract<ValidateResult, { type: "success" }>;
 type Invalid = Exclude<ValidateResult, { type: "success" }>;
 
+/* Debug ---------------------------------------------------------------------*/
+
+type DebugFn = (event: { stage: string; artifacts: object }) => void;
+
+export const Debug = Ctx.Reference<DebugFn>("Debug", {
+  defaultValue: () => () => {},
+});
+
+const debugStage = (stage: string, artifacts: object) =>
+  Effect.gen(function* () {
+    const debug = yield* Debug;
+    debug({ stage, artifacts });
+  });
+
 /* Steps ---------------------------------------------------------------------*/
 
 export const extract = (file: File): Effect.Effect<Extracted, StageError<NotExtracted>> =>
@@ -83,6 +97,9 @@ export const truncate = (valid: Validated) =>
     });
   });
 
+export const encode = (valid: Validated) =>
+  Effect.try({ try: () => JSON.stringify(valid.data.content), catch: thrown });
+
 /* Pipeline ------------------------------------------------------------------*/
 
 /** A stage's work: reads the context built so far and yields this stage's value. */
@@ -94,18 +111,22 @@ type Run<Prior, Value, Detail, Req> = (
 type Extended<Prior, Name extends string, Value> = Prior & Record<Name, Value>;
 
 /** Add a stage's value to the context. */
-const extend = <Prior extends object, Name extends string, Value>(
+function extend<Prior extends object, Name extends string, Value>(
   prior: Prior,
   name: Name,
   value: Value,
-) => ({ ...prior, [name]: value }) as Extended<Prior, Name, Value>;
+) {
+  return { ...prior, [name]: value } as Extended<Prior, Name, Value>;
+}
 
 /** Promote a step's error to a pipeline failure by attaching the stage name and prior context. */
-const toFailure = <Name extends string, Detail, Prior>(
+function toFailure<Name extends string, Detail, Prior>(
   stage: Name,
   { message, detail, cause }: StageError<Detail>,
   prior: Prior,
-) => new Failure({ stage, message, detail, cause, prior });
+) {
+  return new Failure({ stage, message, detail, cause, prior });
+}
 
 /**
  * Append a named stage to a pipeline.
@@ -113,29 +134,32 @@ const toFailure = <Name extends string, Detail, Prior>(
  * On success, the stage's value is added to the context under `name`.
  * On failure, the error becomes a `Failure` carrying the context so far as `prior`.
  */
-const step =
-  <Name extends string, Prior extends object, Value, Detail, Req>(
-    name: Name,
-    run: Run<Prior, Value, Detail, Req>,
-  ) =>
-  <E, R>(
-    pipeline: Effect.Effect<Prior, E, R>,
-  ): Effect.Effect<Extended<Prior, Name, Value>, E | Failure<Name, Detail, Prior>, R | Req> =>
+
+function step<Name extends string, Prior extends object, Value, Detail, Req>(
+  name: Name,
+  run: Run<Prior, Value, Detail, Req>,
+) {
+  type A = Extended<Prior, Name, Value>;
+  type E2 = Failure<Name, Detail, Prior>;
+  return <E, R>(pipeline: Effect.Effect<Prior, E, R>): Effect.Effect<A, E | E2, R | Req> =>
     Effect.flatMap(pipeline, (prior) =>
       run(prior).pipe(
         Effect.map((value) => extend(prior, name, value)),
         Effect.mapError((error) => toFailure(name, error, prior)),
+        Effect.tap((result) => debugStage(name, result)),
       ),
     );
+}
 
-export const processChatLog = (file: File) =>
-  Effect.succeed({}).pipe(
+export function processChatLog(file: File) {
+  return Effect.succeed({}).pipe(
     step("extract", () => extract(file)),
     step("parse", ({ extract }) => parseJson(extract.content)),
     step("validate", ({ parse }) => validate(parse)),
     step("truncate", ({ validate }) => truncate(validate)),
-    step("final", ({ truncate }) => Effect.succeed(truncate)),
+    step("encode", ({ truncate }) => encode(truncate)),
   );
+}
 
 /* Derived types -------------------------------------------------------------*/
 
@@ -144,3 +168,10 @@ type Pipeline = ReturnType<typeof processChatLog>;
 export type Artifacts = Effect.Success<Pipeline>;
 export type AnyFailure = Effect.Error<Pipeline>;
 export type Stage = AnyFailure["stage"];
+
+type EventOf<F extends AnyFailure> = F extends unknown
+  ? { stage: F["stage"]; artifacts: F["prior"] & Pick<Artifacts, F["stage"]> }
+  : never;
+
+export type DebugEvent = EventOf<AnyFailure>;
+export type DebugEventFn = (event: DebugEvent) => void;

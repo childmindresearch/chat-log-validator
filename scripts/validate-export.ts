@@ -116,34 +116,44 @@ const bytes = (s: string) => Buffer.byteLength(s, "utf8");
 const truncateBefore = options.truncateDays ? subDays(new Date(), options.truncateDays) : undefined;
 
 try {
-  const { final, extract, validate } = await processExport(file, { truncateBefore });
-
-  const outputJson = JSON.stringify(final);
-  const fullSize = bytes(extract.content);
-
-  log("> Extracted chat logs");
-  log("> Parsed JSON");
-  log("> Validated chat log from source:", formatSource(validate.data.source));
-  log(`> Chat log size: ${formatBytes(fullSize)}`);
-
-  if (truncateBefore) {
-    const truncatedSize = bytes(outputJson);
-    const sign = fullSize > truncatedSize ? "-" : "";
-
-    log(`> Truncated chat log to ${options.truncateDays} days`);
-    log(`> Truncated size: ${formatBytes(truncatedSize)}`);
-    log(`> Size diff: ${sign}${formatBytes(fullSize - truncatedSize)}`);
-  } else {
-    warn("> Skipped truncation");
-  }
+  const { encode } = await processExport(file, {
+    truncateBefore,
+    debug: ({ stage, artifacts }) => {
+      switch (stage) {
+        case "extract":
+          log("> Extracted chat logs");
+          log(`> Chat log size: ${formatBytes(artifacts.extract.extracted.size)}`);
+          return;
+        case "parse":
+          log("> Parsed JSON");
+          return;
+        case "validate":
+          log("> Validated chat log from source:", formatSource(artifacts.validate.data.source));
+          return;
+        case "truncate":
+          if (truncateBefore) log(`> Truncated chat log to ${options.truncateDays} days`);
+          else warn("> Skipped truncation");
+          return;
+        case "encode":
+          if (truncateBefore) {
+            const fullSize = artifacts.extract.extracted.size;
+            const truncatedSize = bytes(artifacts.encode);
+            const sign = fullSize > truncatedSize ? "-" : "";
+            log(`> Truncated size: ${formatBytes(truncatedSize)}`);
+            log(`> Size diff: ${sign}${formatBytes(fullSize - truncatedSize)}`);
+          }
+          return;
+      }
+    },
+  });
 
   if (options.raw) {
-    console.log(outputJson);
+    console.log(encode);
   }
 
   if (options.output) {
     try {
-      options.output.file.write(outputJson);
+      options.output.file.write(encode);
       log(`> Wrote output logs to: ${options.output.path}`);
     } catch (e) {
       console.error(`(!) Could not write output to: ${options.output.path}`);

@@ -1,7 +1,18 @@
 import { Effect } from "effect";
-import { Config, processChatLog, AnyFailure, Artifacts } from "@validator/pipeline";
+import {
+  processChatLog,
+  Config,
+  AnyFailure,
+  Artifacts,
+  Debug,
+  DebugEventFn,
+} from "@validator/pipeline";
 
-export type Options = { truncateBefore?: Date };
+export type Options = {
+  truncateBefore?: Date;
+  debug?: DebugEventFn;
+};
+
 export type PipelineArtifacts = Artifacts;
 
 type FailureData<F extends AnyFailure> = F extends unknown
@@ -24,6 +35,7 @@ export type SafeResult =
 export const safeProcessExport = (file: File, options: Options = {}): Promise<SafeResult> =>
   processChatLog(file).pipe(
     Effect.provideService(Config, options),
+    Effect.provideService(Debug, options.debug ?? (() => {})),
     Effect.match({
       onSuccess: (artifacts) => ({ ok: true as const, artifacts }),
       onFailure: ({ stage, message, detail, prior, cause }) => ({
