@@ -122,7 +122,7 @@ try {
       switch (stage) {
         case "extract":
           log("> Extracted chat logs");
-          log(`> Chat log size: ${formatBytes(artifacts.extract.extracted.size)}`);
+          log(`> File size: ${formatBytes(artifacts.extract.extracted.size)}`);
           return;
         case "parse":
           log("> Parsed JSON");
@@ -163,7 +163,7 @@ try {
 } catch (e) {
   if (!(e instanceof PipelineError)) throw e;
 
-  console.error(`(!) [${e.failure.stage}] ${e.failure.message}`);
+  console.error(`(!) Failed at '${e.failure.stage}': ${e.failure.message}`);
 
   if (e.failure.stage === "validate") {
     e.failure.detail.errors.forEach((s) => console.error("    |", s));
