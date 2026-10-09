@@ -11,6 +11,7 @@
     "@commander-js/extra-typings": "^15.0.0",
     "commander": "^15.0.0",
     "date-fns": "^4.4.0",
+    "effect": "^4.0.2",
     "jszip": "^3.10.2",
     "remeda": "^2.50.0",
     "untildify": "^6.0.0",
