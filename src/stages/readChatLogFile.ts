@@ -1,15 +1,13 @@
 import JSZip from "jszip";
 import { VFile } from "vfile";
 import * as R from "remeda";
-import { BaseGeminiPromptSchema, BaseGeminiPrompt } from "@validator/schema";
+import { InputFileType, BaseGeminiPromptSchema, BaseGeminiPrompt } from "@validator/schema";
 
 // Types -----------------------------------------------------------------------
 
 export type ReadChatLogFileErrorFn = (error: ReadChatLogFileError) => void;
 
 export type ReadChatLogFileFn = (file: File) => Promise<void>;
-
-export type InputFileType = "json" | "zip";
 
 export interface ReadChatLogFileError {
   message: string;
