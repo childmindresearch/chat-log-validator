@@ -71,7 +71,7 @@ export const extract = (file: File): Effect.Effect<Extracted, StageError<NotExtr
         ? Effect.succeed(result)
         : Effect.fail(
             new StageError({
-              message: result.status === "empty" ? "No valid files found" : result.error.message,
+              message: result.message,
               detail: result,
             }),
           ),

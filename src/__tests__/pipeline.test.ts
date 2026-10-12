@@ -77,16 +77,16 @@ describe("extract", () => {
 
     expect(error).toBeInstanceOf(StageError);
     expect(error.message).toBe("Invalid file type: .txt");
-    expect(error.detail).toMatchObject({ status: "error", error: { log: false } });
+    expect(error.detail).toMatchObject({ status: "error", reason: "unsupported_file" });
   });
 
-  it("fails with a generic message when an archive has no chat logs", async () => {
+  it("fails with the empty reason's message when an archive has no chat logs", async () => {
     const error = await fail(extract(await makeZip({ "readme.txt": "hi" })));
 
-    expect(error.message).toBe("No valid files found");
+    expect(error.message).toBe("Archive does not contain any known chat log files");
     expect(error.detail).toMatchObject({
       status: "empty",
-      reason: expect.stringContaining("known chat log"),
+      reason: "archive_contains_no_known_files",
     });
   });
 });

@@ -64,7 +64,7 @@ describe("zip: single-file path", () => {
     expect(r).toMatchObject({
       status: "empty",
       inputFileType: "zip",
-      reason: expect.stringContaining("known chat log"),
+      reason: "archive_contains_no_known_files",
     });
     if (r.status === "empty") expect(r.input.name).toBe("x.zip");
   });
@@ -104,7 +104,7 @@ describe("zip: multi-file path", () => {
     const r = await readChatLogFile(file);
     expect(r).toMatchObject({
       status: "empty",
-      reason: expect.stringContaining("multiple sources"),
+      reason: "failed_to_compile_conversations",
     });
   });
 
@@ -113,7 +113,7 @@ describe("zip: multi-file path", () => {
     const r = await readChatLogFile(file);
     expect(r).toMatchObject({
       status: "empty",
-      reason: expect.stringContaining("multiple sources"),
+      reason: "failed_to_compile_conversations",
     });
   });
 
@@ -165,7 +165,7 @@ describe("zip: multi-file path", () => {
     const r = await readChatLogFile(nestedChatGPTZip);
     expect(r).toMatchObject({
       status: "empty",
-      reason: expect.stringContaining("known chat log files"),
+      reason: "archive_contains_no_known_files",
     });
   });
 
@@ -187,7 +187,7 @@ describe("zip: multi-file path", () => {
     const r = await readChatLogFile(nestedChatGPTZip);
     expect(r).toMatchObject({
       status: "empty",
-      reason: expect.stringContaining("multiple sources"),
+      reason: "failed_to_compile_conversations",
     });
   });
 });
@@ -230,7 +230,7 @@ describe("zip: gemini path", () => {
     const r = await readChatLogFile(file);
     expect(r).toMatchObject({
       status: "empty",
-      reason: expect.stringContaining("no activity records"),
+      reason: "empty_gemini_export",
     });
   });
 });
@@ -289,7 +289,8 @@ describe("zip: failure modes", () => {
     );
     expect(r).toMatchObject({
       status: "error",
-      error: { message: expect.stringContaining("not a valid zip") },
+      reason: "invalid_zip_file",
+      message: expect.stringContaining("not a valid zip"),
     });
   });
 });
@@ -318,11 +319,12 @@ describe("plain json", () => {
 });
 
 describe("rejected types", () => {
-  it("names the extension and sets log: false", async () => {
+  it("names the extension in the message", async () => {
     const r = await readChatLogFile(new File(["x"], "notes.txt", { type: "text/plain" }));
     expect(r).toMatchObject({
       status: "error",
-      error: { message: expect.stringContaining(".txt"), log: false },
+      reason: "unsupported_file",
+      message: "Invalid file type: .txt",
     });
   });
 
@@ -330,7 +332,8 @@ describe("rejected types", () => {
     const r = await readChatLogFile(new File(["x"], "README", { type: "text/plain" }));
     expect(r).toMatchObject({
       status: "error",
-      error: { message: "Invalid file type", log: false },
+      reason: "unsupported_file",
+      message: "Invalid file type",
     });
   });
 });

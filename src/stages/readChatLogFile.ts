@@ -5,14 +5,23 @@ import { InputFileType, BaseGeminiPromptSchema, BaseGeminiPrompt } from "@valida
 
 // Types -----------------------------------------------------------------------
 
-export type ReadChatLogFileErrorFn = (error: ReadChatLogFileError) => void;
+const EMPTY_MESSAGES = {
+  archive_contains_no_known_files: "Archive does not contain any known chat log files",
+  invalid_nested_archive: "Nested archive is not a valid zip file",
+  archive_nested_too_deeply: "Archive is nested too deeply",
+  empty_gemini_export: "Gemini export contains no activity records",
+  failed_to_compile_gemini_activity: "Failed to compile Gemini activity from archive",
+  failed_to_compile_conversations: "Failed to compile conversations.json from multiple sources",
+} as const;
 
-export type ReadChatLogFileFn = (file: File) => Promise<void>;
+const ERROR_MESSAGES = {
+  invalid_zip_file: "Archive is not a valid zip file",
+  unsupported_file: "Invalid file type",
+  file_read_failed: "Failed to read file",
+} as const;
 
-export interface ReadChatLogFileError {
-  message: string;
-  log?: boolean;
-}
+export type EmptyReason = keyof typeof EMPTY_MESSAGES;
+export type FileErrorReason = keyof typeof ERROR_MESSAGES;
 
 export type ReadChatLogFileResult =
   | {
@@ -22,8 +31,13 @@ export type ReadChatLogFileResult =
       extracted: File;
       content: string;
     }
-  | { status: "empty"; input: File; inputFileType: "zip"; reason: string }
-  | { status: "error"; error: ReadChatLogFileError };
+  | { status: "empty"; input: File; inputFileType: "zip"; message: string; reason: EmptyReason }
+  | { status: "error"; message: string; reason: FileErrorReason };
+
+const failed = (
+  reason: FileErrorReason,
+  message: string = ERROR_MESSAGES[reason],
+): ReadChatLogFileResult => ({ status: "error", reason, message });
 
 // File Path Checks ------------------------------------------------------------
 
@@ -75,7 +89,7 @@ async function mergeGeminiEntries(entries: JSZip.JSZipObject[]) {
 async function concatChatGPTFiles(
   files: File[],
   extracted: (content: string, name: string) => ReadChatLogFileResult,
-  empty: (reason: string) => ReadChatLogFileResult,
+  empty: (reason: EmptyReason) => ReadChatLogFileResult,
 ) {
   try {
     const results: unknown[][] = [];
@@ -92,7 +106,7 @@ async function concatChatGPTFiles(
 
     return extracted(JSON.stringify(results.flat()), "conversations.json");
   } catch {
-    return empty("Failed to compile conversations.json from multiple sources");
+    return empty("failed_to_compile_conversations");
   }
 }
 
@@ -113,20 +127,19 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
     content,
   });
 
-  const empty = (reason: string): ReadChatLogFileResult => ({
+  const empty = (reason: EmptyReason): ReadChatLogFileResult => ({
     status: "empty",
     input,
     inputFileType: "zip",
     reason,
+    message: EMPTY_MESSAGES[reason],
   });
 
   let zip: JSZip;
   try {
     zip = await JSZip.loadAsync(await blob.arrayBuffer());
   } catch {
-    return depth === 0
-      ? { status: "error", error: { message: "Archive is not a valid zip file" } }
-      : empty("Nested archive is not a valid zip file");
+    return depth === 0 ? failed("invalid_zip_file") : empty("invalid_nested_archive");
   }
 
   const files = Object.values(zip.files).filter((e) => !e.dir);
@@ -138,12 +151,12 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
       const merged = await mergeGeminiEntries(geminiEntries);
 
       if (merged.length === 0) {
-        return empty("Gemini export contains no activity records");
+        return empty("empty_gemini_export");
       }
 
       return extracted(JSON.stringify(merged), "MyActivity.json");
     } catch {
-      return empty("Failed to compile Gemini activity from archive");
+      return empty("failed_to_compile_gemini_activity");
     }
   }
 
@@ -172,12 +185,12 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
 
   if (nestedArchives.length > 0) {
     if (MAX_ARCHIVE_DEPTH !== null && depth >= MAX_ARCHIVE_DEPTH) {
-      return empty("Archive is nested too deeply");
+      return empty("archive_nested_too_deeply");
     }
 
     const results: Extract<ReadChatLogFileResult, { status: "extracted" }>[] = [];
 
-    let firstEmptyReason: string | null = null;
+    let firstEmpty: Extract<ReadChatLogFileResult, { status: "empty" }> | null = null;
 
     for (const archive of nestedArchives) {
       const result = await scanArchive(input, await archive.async("blob"), depth + 1);
@@ -187,7 +200,7 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
       }
 
       if (result.status === "empty") {
-        firstEmptyReason ??= result.reason;
+        firstEmpty ??= result;
         continue;
       }
 
@@ -195,7 +208,7 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
     }
 
     if (results.length === 0) {
-      return empty(firstEmptyReason ?? "Archive does not contain any known chat log files");
+      return firstEmpty ?? empty("archive_contains_no_known_files");
     }
 
     const jsonFiles = results.map((r) => r.extracted);
@@ -203,7 +216,7 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
     return concatChatGPTFiles(jsonFiles, extracted, empty);
   }
 
-  return empty("Archive does not contain any known chat log files");
+  return empty("archive_contains_no_known_files");
 }
 
 export async function readArchive(input: File): Promise<ReadChatLogFileResult> {
@@ -215,7 +228,7 @@ async function readJSON(input: File): Promise<ReadChatLogFileResult> {
     const content = await input.text();
     return { status: "extracted", input, inputFileType: "json", extracted: input, content };
   } catch {
-    return { status: "error", error: { message: "Failed to read file" } };
+    return failed("file_read_failed");
   }
 }
 
@@ -231,6 +244,8 @@ export async function readChatLogFile(input: File): Promise<ReadChatLogFileResul
   }
 
   const extname = new VFile({ path: input.name }).extname?.toLowerCase();
-  const message = extname ? `Invalid file type: ${extname}` : "Invalid file type";
-  return { status: "error", error: { message, log: false } };
+  return failed(
+    "unsupported_file",
+    extname ? `${ERROR_MESSAGES.unsupported_file}: ${extname}` : undefined,
+  );
 }
