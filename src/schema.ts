@@ -181,9 +181,19 @@ export type GeminiPromptArray = z.infer<typeof GeminiPromptArraySchema>;
 
 export const validSources = ["claude", "chatgpt", "gemini"] as const;
 
-export type ValidSource = (typeof validSources)[number];
-
 export const ValidSourceSchema = z.enum(validSources);
+
+export type ValidSource = z.infer<typeof ValidSourceSchema>;
+
+export const validSourceLabelMap: Record<ValidSource, string> = {
+  chatgpt: "ChatGPT",
+  claude: "Claude",
+  gemini: "Gemini",
+};
+
+export function formatSource(source: ValidSource) {
+  return validSourceLabelMap[source];
+}
 
 export interface ValidSourceDataMap extends Record<ValidSource, unknown> {
   claude: ClaudeConversationArray;
@@ -197,14 +207,3 @@ export type ValidDataT<S extends ValidSource> = {
 };
 
 export type ValidData = { [S in ValidSource]: ValidDataT<S> }[ValidSource];
-
-export function formatSource(source: ValidSource) {
-  switch (source) {
-    case "claude":
-      return "Claude";
-    case "chatgpt":
-      return "ChatGPT";
-    case "gemini":
-      return "Gemini";
-  }
-}
