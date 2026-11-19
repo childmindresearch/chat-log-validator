@@ -54,7 +54,7 @@ export const ClaudeChatMessageSchema = z.looseObject({
   content: z.array(ClaudeChatMessageContentSchema),
   created_at: z.string(),
   files: z.array(z.any()),
-  parent_message_uuid: z.uuid(),
+  parent_message_uuid: z.uuid().nullish(),
   sender: z.enum(["human", "assistant"]).or(z.string()),
   text: z.string(),
   updated_at: z.string(),
@@ -92,7 +92,7 @@ export const ChatGPTRoleSchema = z.enum(["user", "assistant", "system", "tool"])
 export type ChatGPTRole = z.infer<typeof ChatGPTRoleSchema>;
 
 export const ChatGPTMessageSchema = z.looseObject({
-  id: z.uuid(),
+  id: z.any(),
   author: z.looseObject({
     role: ChatGPTRoleSchema,
   }),
