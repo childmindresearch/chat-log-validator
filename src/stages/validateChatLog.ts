@@ -1,12 +1,9 @@
-import { z } from "zod";
 import { $ZodIssueBase } from "zod/v4/core";
 import {
-  ClaudeConversationArraySchema,
-  ChatGPTConversationArraySchema,
-  GeminiPromptArraySchema,
   ValidSourceDataMap,
   ValidSource,
   ValidDataT,
+  validSourceSchemaMap,
 } from "@validator/schema";
 
 function formatIssues(issues: $ZodIssueBase[]) {
@@ -81,10 +78,10 @@ export type UnknownResult = {
 };
 
 function validateWith<S extends ValidSource>(
-  schema: z.ZodType,
-  data: unknown,
   source: S,
+  data: unknown,
 ): ValidationSuccessT<S> | SafeValidationFailure {
+  const schema = validSourceSchemaMap[source];
   const result = schema.safeParse(data);
 
   if (result.success) {
@@ -119,13 +116,16 @@ export function validateChatLog(data: unknown): ValidationResult {
 
   if (sample && typeof sample === "object") {
     if ("chat_messages" in sample) {
-      return validateWith(ClaudeConversationArraySchema, data, "claude");
+      return validateWith("claude", data);
     }
     if ("mapping" in sample) {
-      return validateWith(ChatGPTConversationArraySchema, data, "chatgpt");
+      return validateWith("chatgpt", data);
+    }
+    if ("createTimeUtc" in sample) {
+      return validateWith("chatgpt_v2", data);
     }
     if ("activityControls" in sample) {
-      return validateWith(GeminiPromptArraySchema, data, "gemini");
+      return validateWith("gemini", data);
     }
   }
 

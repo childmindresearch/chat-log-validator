@@ -12,6 +12,7 @@ const EMPTY_MESSAGES = {
   empty_gemini_export: "Gemini export contains no activity records",
   failed_to_compile_gemini_activity: "Failed to compile Gemini activity from archive",
   failed_to_compile_conversations: "Failed to compile conversations.json from multiple sources",
+  empty_chatgpt_v2_export: "ChatGPT export contains no conversation files",
 } as const;
 
 const ERROR_MESSAGES = {
@@ -61,6 +62,11 @@ function isValidMultiFilePath(name: string) {
   return !!match;
 }
 
+function isChatGPTManifestV2Path(name: string) {
+  const file = new VFile({ path: name });
+  return file.basename === "_manifest.json";
+}
+
 // Gemini Archive Parsing ------------------------------------------------------
 
 function isGeminiRecord(data: unknown): data is BaseGeminiPrompt {
@@ -92,13 +98,37 @@ async function concatChatGPTFiles(
   empty: (reason: EmptyReason) => ReadChatLogFileResult,
 ) {
   try {
-    const results: unknown[][] = [];
+    const results: (readonly unknown[])[] = [];
 
     for (const entry of R.sortBy(files, (e) => e.name)) {
       const parsed: unknown = JSON.parse(await entry.text());
 
-      if (!Array.isArray(parsed)) {
+      if (!R.isArray(parsed)) {
         throw new Error(`${entry.name} is not a JSON array`);
+      }
+
+      results.push(parsed);
+    }
+
+    return extracted(JSON.stringify(results.flat()), "conversations.json");
+  } catch {
+    return empty("failed_to_compile_conversations");
+  }
+}
+
+async function concatChatGPTFilesV2(
+  files: File[],
+  extracted: (content: string, name: string) => ReadChatLogFileResult,
+  empty: (reason: EmptyReason) => ReadChatLogFileResult,
+) {
+  try {
+    const results: unknown[] = [];
+
+    for (const entry of R.sortBy(files, (e) => e.name)) {
+      const parsed: unknown = JSON.parse(await entry.text());
+
+      if (!R.isPlainObject(parsed)) {
+        throw new Error(`${entry.name} is not a JSON object`);
       }
 
       results.push(parsed);
@@ -170,6 +200,22 @@ async function scanArchive(input: File, blob: Blob, depth: number): Promise<Read
       chatGPTEntries.map(async (e) => new File([await e.async("blob")], e.name)),
     );
     return concatChatGPTFiles(jsonFiles, extracted, empty);
+  }
+
+  // TODO: Parse and validate manifests from V2 ChatGPT exports
+  const chatGPTManifestV2 = files.find((e) => isChatGPTManifestV2Path(e.name));
+
+  if (chatGPTManifestV2) {
+    const conversationFiles = files.filter(
+      (e) => e.name.toLowerCase().endsWith(".json") && !isChatGPTManifestV2Path(e.name),
+    );
+    if (conversationFiles.length === 0) {
+      return empty("empty_gemini_export");
+    }
+    const jsonFiles = await Promise.all(
+      conversationFiles.map(async (e) => new File([await e.async("blob")], e.name)),
+    );
+    return concatChatGPTFilesV2(jsonFiles, extracted, empty);
   }
 
   const entry = files.find((e) => isValidSingleFilePath(e.name));

@@ -132,6 +132,40 @@ export const ChatGPTConversationArraySchema = z.array(ChatGPTConversationSchema)
 export type ChatGPTConversationArray = z.infer<typeof ChatGPTConversationArraySchema>;
 
 /* -----------------------------------------------------------------------------
+ * ChatGPT Manifest Parsing (V2)
+ * -------------------------------------------------------------------------- */
+
+// TODO: Parse and validate manifests from V2 ChatGPT exports
+
+/* -----------------------------------------------------------------------------
+ * ChatGPT Conversation Parsing (V2)
+ * -------------------------------------------------------------------------- */
+
+export const ChatGPTMessageSchemaV2 = z.looseObject({
+  id: z.uuid(),
+  role: ChatGPTRoleSchema,
+  isUser: z.boolean(),
+  model: z.string().nullable(),
+  timestampUtc: z.iso.datetime().nullable(),
+  message: z.string(),
+});
+
+export const ChatGPTConversationSchemaV2 = z.looseObject({
+  id: z.uuid(),
+  title: z.string().nullish(),
+  createTimeUtc: z.iso.datetime(),
+  updateTimeUtc: z.iso.datetime().nullish(),
+  contentIncluded: z.boolean(),
+  messages: z.array(ChatGPTMessageSchemaV2),
+});
+
+export type ChatGPTConversationV2 = z.infer<typeof ChatGPTConversationSchemaV2>;
+
+export const ChatGPTConversationArraySchemaV2 = z.array(ChatGPTConversationSchemaV2);
+
+export type ChatGPTConversationArrayV2 = z.infer<typeof ChatGPTConversationArraySchemaV2>;
+
+/* -----------------------------------------------------------------------------
  * Gemini Prompt Parsing
  * -------------------------------------------------------------------------- */
 
@@ -179,15 +213,16 @@ export type GeminiPromptArray = z.infer<typeof GeminiPromptArraySchema>;
  * Valid Data Sources
  * -------------------------------------------------------------------------- */
 
-export const validSources = ["claude", "chatgpt", "gemini"] as const;
+export const validSources = ["claude", "chatgpt", "chatgpt_v2", "gemini"] as const;
 
 export const ValidSourceSchema = z.enum(validSources);
 
 export type ValidSource = z.infer<typeof ValidSourceSchema>;
 
 export const validSourceLabelMap: Record<ValidSource, string> = {
-  chatgpt: "ChatGPT",
   claude: "Claude",
+  chatgpt: "ChatGPT",
+  chatgpt_v2: "ChatGPT",
   gemini: "Gemini",
 };
 
@@ -195,11 +230,21 @@ export function formatSource(source: ValidSource) {
   return validSourceLabelMap[source];
 }
 
-export interface ValidSourceDataMap extends Record<ValidSource, unknown> {
+type ExhaustiveSourceMap<T extends Record<ValidSource, unknown>> = T;
+
+export type ValidSourceDataMap = ExhaustiveSourceMap<{
   claude: ClaudeConversationArray;
   chatgpt: ChatGPTConversationArray;
+  chatgpt_v2: ChatGPTConversationArrayV2;
   gemini: GeminiPromptArray;
-}
+}>;
+
+export const validSourceSchemaMap = {
+  claude: ClaudeConversationArraySchema,
+  chatgpt: ChatGPTConversationArraySchema,
+  chatgpt_v2: ChatGPTConversationArraySchemaV2,
+  gemini: GeminiPromptArraySchema,
+} satisfies { [S in ValidSource]: z.ZodType<ValidSourceDataMap[S]> };
 
 export type ValidDataT<S extends ValidSource> = {
   source: S;
