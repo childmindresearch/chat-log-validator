@@ -54,6 +54,29 @@ export function truncateChatGPTChatLog(
   return { ...data, content };
 }
 
+export function truncateChatGPTChatLogV2(
+  data: ValidDataT<"chatgpt_v2">,
+  expiresAt: Date,
+): ValidDataT<"chatgpt_v2"> {
+  const content = R.pipe(
+    data.content,
+    R.map((conversation) => ({
+      ...conversation,
+      messages: R.filter(conversation.messages, (message) => {
+        const timestamp = message.timestampUtc;
+        if (timestamp === null) {
+          return false;
+        }
+        const createdAt = new Date(timestamp);
+        return isAfter(createdAt, expiresAt);
+      }),
+    })),
+    R.filter((conversation) => conversation.messages.length > 0),
+  );
+
+  return { ...data, content };
+}
+
 export function truncateGeminiChatLog(
   data: ValidDataT<"gemini">,
   expiresAt: Date,
@@ -81,6 +104,8 @@ export function truncateChatLog(
       return { ...result, data: truncateClaudeChatLog(result.data, truncateDate) };
     case "chatgpt":
       return { ...result, data: truncateChatGPTChatLog(result.data, truncateDate) };
+    case "chatgpt_v2":
+      return { ...result, data: truncateChatGPTChatLogV2(result.data, truncateDate) };
     case "gemini":
       return { ...result, data: truncateGeminiChatLog(result.data, truncateDate) };
   }
